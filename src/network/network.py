@@ -30,7 +30,7 @@ class CNN(object):
         self.optimizers = {
             "Adam": Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False),
             "SGD": SGD(lr=0.01, momentum=0.0, decay=0.0, nesterov=False),
-            "RMSprop": RMSprop(lr=0.001, rho=0.9, epsilon=None, decay=1e-6),
+            "RMSprop": RMSprop(lr=0.0001, rho=0.9, epsilon=None, decay=1e-6),
             "Adagrad": Adagrad(lr=0.01, epsilon=None, decay=0.0),
             "Adadelta": Adadelta(lr=1.0, rho=0.95, epsilon=None, decay=0.0),
             "Adamax": Adamax(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0),
@@ -118,6 +118,7 @@ class CNN(object):
         model.add(Dense(self.classifications, activation='sigmoid'))
         return model
 
+    # simple deep CNN
     def build_CIFAR10(self, input_shape):
         model = Sequential()
         model.add(Conv2D(32, (2, 2), padding='same',
