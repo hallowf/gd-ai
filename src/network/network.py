@@ -175,7 +175,7 @@ class CNN(object):
         model.compile(loss="categorical_crossentropy", optimizer=optzr, metrics=['accuracy'])
 
         graph_dir = "./Graph/%s/%s" % (self.network_type,self.optimizer)
-        if not os.path.isdir():
+        if not os.path.isdir(graph_dir):
             os.makedirs(graph_dir, exist_ok=True)
         # tensorboard data callback
         tbCallBack = keras.callbacks.TensorBoard(log_dir=graph_dir, histogram_freq=0, write_graph=True, write_images=True)
