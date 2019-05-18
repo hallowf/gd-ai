@@ -1,6 +1,4 @@
 import os, sys
-import plaidml.keras
-plaidml.keras.install_backend()
 import keras
 from keras.models import load_model
 from keras.models import Sequential
