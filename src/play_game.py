@@ -11,9 +11,9 @@ from browser_controller import BController
 #
 
 if __name__ == '__main__':
-    bot = CNNBot("MLP_RMSprop_set2.h5")
+    bot = CNNBot("CIFAR10_RMSprop_set3.h5")
     try:
         while True:
             bot.predict()
-    except KeyboardInterruption:
+    except KeyboardInterrupt:
         sys.stdout.write("Disconnecting\n")

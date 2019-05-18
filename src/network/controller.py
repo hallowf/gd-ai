@@ -56,10 +56,10 @@ class CNNBot(object):
         if int(prediction) == 1:
             # jump
             sys.stdout.write("jump\n")
+            # time.sleep(0.1)
             keyboard.press("up arrow")
-            time.sleep(0.2)
+            time.sleep(0.3)
             keyboard.release("up arrow")
-            time.sleep(0.2)
         elif int(prediction) == 0:
             # do nothing
             sys.stdout.write("walk\n")
@@ -67,7 +67,7 @@ class CNNBot(object):
         elif int(prediction) == 2:
             # duck
             sys.stdout.write("duck\n")
+            time.sleep(0.2)
             keyboard.press("down arrow")
             time.sleep(0.2)
             keyboard.release("down arrow")
-            time.sleep(0.2)

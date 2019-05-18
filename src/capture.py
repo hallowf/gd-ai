@@ -7,8 +7,12 @@ import keyboard
 class Recorder(object):
 
     def __init__(self, set=1,coords=(360,30,615,160)):
-        if os.path.isfile("actions/set%s_actions.csv") or os.path.isdir("images/set%s" % set):
-            set += 1
+        set_exists = True if os.path.isfile("actions/set%s_actions.csv" % set) else False
+        while set_exists:
+            if os.path.isfile("actions/set%s_actions.csv" % set) or os.path.isdir("images/set%s" % set):
+                set += 1
+            else:
+                set_exists = False
         self.actions = "actions/set%s_actions.csv" % set
         self.set = set
         top,left,width,height = coords
