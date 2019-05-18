@@ -5,8 +5,7 @@ from network.network import CNN
 
 class Trainer(object):
     """docstring for Trainer."""
-
-    def __init__(self,network_type="unknown", optimizer="Adam"):
+    def __init__(self, network_type="unknown", optimizer="Adam"):
         self.network = network_type
         self.optimizer = optimizer
 
@@ -16,10 +15,11 @@ class Trainer(object):
         cnn.start()
 
 
-
+def main():
+    args = None
+    Trainer("CIFAR10").run_neural_network()
 
 
 
 if __name__ == '__main__':
-    args = None
-    Trainer("CIFAR10").run_neural_network()
+    main()
