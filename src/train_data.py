@@ -7,7 +7,6 @@ class Trainer(object):
     """docstring for Trainer."""
 
     def __init__(self,network_type="unknown", optimizer="Adam"):
-        super(Trainer, self).__init__()
         self.network = network_type
         self.optimizer = optimizer
 
