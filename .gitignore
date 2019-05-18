@@ -1,0 +1,8 @@
+venv
+*.log
+*.h5
+*.jpg
+*.csv
+__pycache__
+drivers
+Graph

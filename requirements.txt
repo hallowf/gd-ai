@@ -1,0 +1,7 @@
+selenium
+opencv-python
+keyboard
+mss
+keras
+tensorflow
+sklearn
