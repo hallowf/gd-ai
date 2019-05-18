@@ -6,9 +6,12 @@ from network.controller import CNNBot
 from browser_controller import BController
 
 
+# mlp shid
+# CIFAR10 best
+#
 
 if __name__ == '__main__':
-    bot = CNNBot()
+    bot = CNNBot("CIFAR10_Adam_set2_trainingData.h5")
     try:
         while True:
             bot.predict()

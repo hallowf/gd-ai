@@ -174,12 +174,12 @@ class CNN(object):
         model.compile(loss="categorical_crossentropy", optimizer=optzr, metrics=['accuracy'])
 
         # tensorboard data callback
-        tbCallBack = keras.callbacks.TensorBoard(log_dir='./Graph', histogram_freq=0, write_graph=True, write_images=True)
+        tbCallBack = keras.callbacks.TensorBoard(log_dir='./Graph/%s' % (self.network_type), histogram_freq=0, write_graph=True, write_images=True)
 
         model.fit(x_train, y_train, batch_size=250, epochs=60, validation_data=(x_test, y_test), callbacks=[tbCallBack])
 
         # Build name: networkType_optimizer_set(X)_trainingData.h5
-        model_name = "%s_%s_set%s_trainingData.h5" % (self.network_type, optzr, self.set)
+        model_name = "%s_%s_set%s.h5" % (self.network_type, optzr, self.set)
 
         # save weights post training
         model.save(model_name)

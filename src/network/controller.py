@@ -49,19 +49,22 @@ class CNNBot(object):
         if keyboard.is_pressed("q"):
             sys.exit(0)
 
+        sys.stdout.flush()
         if int(prediction) == 1:
             # jump
             sys.stdout.write("jump\n")
             keyboard.press("up arrow")
             time.sleep(0.2)
             keyboard.release("up arrow")
+            time.sleep(0.2)
         elif int(prediction) == 0:
             # do nothing
             sys.stdout.write("walk\n")
             pass
         elif int(prediction) == 2:
             # duck
-            keyboard.press("up arrow")
+            sys.stdout.write("duck\n")
+            keyboard.press("down arrow")
             time.sleep(0.2)
             keyboard.release("down arrow")
-            self.driver.send_keys(u'\ue015')
+            time.sleep(0.2)
