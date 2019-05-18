@@ -180,7 +180,7 @@ class CNN(object):
         # tensorboard data callback
         tbCallBack = keras.callbacks.TensorBoard(log_dir=graph_dir, histogram_freq=0, write_graph=True, write_images=True)
 
-        model.fit(x_train, y_train, batch_size=20, epochs=2, validation_data=(x_test, y_test), callbacks=[tbCallBack])
+        model.fit(x_train, y_train, batch_size=250, epochs=60, validation_data=(x_test, y_test), callbacks=[tbCallBack])
         if not os.path.isdir("trained_models"):
             os.mkdir("trained_models")
         # Build name: networkType_optimizer_set(X)_trainingData.h5
