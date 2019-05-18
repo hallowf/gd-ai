@@ -10,7 +10,6 @@ from browser_controller import BController
 class CNNBot(object):
 
     def __init__(self, set_name="testing_data.h5", coords=(360,30,615,160)):
-        self.actions = "actions.csv"
         top,left,width,height = coords
         self.top = top
         self.left = left
