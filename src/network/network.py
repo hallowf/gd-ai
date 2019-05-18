@@ -13,23 +13,12 @@ import cv2
 
 class CNN(object):
 
-    def __init__(self, set=1, network_type="unknown", seed_weight=3):
+    def __init__(self, set=1, network_type="unknown",optimizer="Adam", seed_weight=3):
         if not os.path.isfile("actions/set%s_actions.csv" % set) and not os.path.isdir("images/set%s" % set):
             if set == 10:
                 sys.stdout.write("Didn't find training sets\n")
                 sys.exit(1)
             set += 1
-        self.set = set
-        np.random.seed(seed_weight)
-        self.x = []
-        self.y = []
-        self.network_type = network_type
-        self.classifications = 3
-        self.img_num = 0
-        self.img_count = len(os.listdir("images/set%s" % set))
-        self.actions_count = 0
-        self.actions = {}
-        # Map models to functions
         self.models = {
             "unknown": self.build_unknown_model,
             "CIFAR10": self.build_CIFAR10,
@@ -47,7 +36,20 @@ class CNN(object):
             "Adamax": Adamax(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0),
             "Nadam": Nadam(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=None, schedule_decay=0.004)
         }
-        # Fetch sample data
+        if optimizer not in list(self.optimizers.keys()):
+            sys.stdout.write("Invalid optimizer: %s\n" % optimizer)
+        self.optimizer = optimizer
+        self.set = set
+        np.random.seed(seed_weight)
+        self.x = []
+        self.y = []
+        self.network_type = network_type
+        self.classifications = 3
+        self.img_num = 0
+        self.img_count = len(os.listdir("images/set%s" % set))
+        self.actions_count = 0
+        self.actions = {}
+        # map trained data
         self.map_actions()
         self.map_images()
 
@@ -153,10 +155,7 @@ class CNN(object):
 
 
 
-    def start(self,optzr="Adam"):
-        if optzr not in self.optimizers:
-            sys.stdout.write("Invalid optimizer%s" % optimizer)
-            sys.exit(1)
+    def start(self):
         # split into test and train set
         x_train, x_test, y_train, y_test = train_test_split(self.x, self.y, test_size=.2, random_state=5)
 
@@ -169,17 +168,23 @@ class CNN(object):
         y_train = keras.utils.to_categorical(y_train, self.classifications)
         y_test = keras.utils.to_categorical(y_test, self.classifications)
 
+        # Load model and optimizer based on user input
         model = self.models[self.network_type](input_shape)
+        optzr = self.optimizers[self.optimizer]
 
         model.compile(loss="categorical_crossentropy", optimizer=optzr, metrics=['accuracy'])
 
+        graph_dir = "./Graph/%s/%s" % (self.network_type,self.optimizer)
+        if not os.path.isdir():
+            os.makedirs(graph_dir, exist_ok=True)
         # tensorboard data callback
-        tbCallBack = keras.callbacks.TensorBoard(log_dir='./Graph/%s' % (self.network_type), histogram_freq=0, write_graph=True, write_images=True)
+        tbCallBack = keras.callbacks.TensorBoard(log_dir=graph_dir, histogram_freq=0, write_graph=True, write_images=True)
 
-        model.fit(x_train, y_train, batch_size=250, epochs=60, validation_data=(x_test, y_test), callbacks=[tbCallBack])
-
+        model.fit(x_train, y_train, batch_size=20, epochs=2, validation_data=(x_test, y_test), callbacks=[tbCallBack])
+        if not os.path.isdir("trained_models"):
+            os.mkdir("trained_models")
         # Build name: networkType_optimizer_set(X)_trainingData.h5
-        model_name = "%s_%s_set%s.h5" % (self.network_type, optzr, self.set)
+        model_name = "trained_models/%s_%s_set%s.h5" % (self.network_type, self.optimizer, self.set)
 
         # save weights post training
         model.save(model_name)

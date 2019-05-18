@@ -15,6 +15,9 @@ class CNNBot(object):
         self.left = left
         self.width = width
         self.height = height
+        if not os.path.isfile(set_name):
+            sys.stdout.write("Missing trained data\n")
+            sys.exit(1)
         self.model = load_model(set_name)
         self.start = time.time()
         driver = BController().get_driver()
