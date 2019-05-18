@@ -58,7 +58,7 @@ class CNNBot(object):
             sys.stdout.write("jump\n")
             # time.sleep(0.1)
             keyboard.press("up arrow")
-            time.sleep(0.3)
+            time.sleep(0.1)
             keyboard.release("up arrow")
         elif int(prediction) == 0:
             # do nothing
