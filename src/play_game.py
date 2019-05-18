@@ -11,7 +11,7 @@ from browser_controller import BController
 #
 
 if __name__ == '__main__':
-    bot = CNNBot("CIFAR10_Adam_set2_trainingData.h5")
+    bot = CNNBot("MLP_RMSprop_set2.h5")
     try:
         while True:
             bot.predict()

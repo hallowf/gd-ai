@@ -88,7 +88,7 @@ class CNN(object):
 
     def build_VGG(self, input_shape):
         model = Sequential()
-        # input: input_shape images with 3 channels -> (x, y, z) tensors.
+        # input: input_shape images with 3 channels -> (x?, y?, z?) tensors.
         # this applies 32 convolution filters of size 3x3 each.
         model.add(Conv2D(32, (2, 2), activation='relu', input_shape=input_shape))
         model.add(Conv2D(32, (2, 2), activation='relu'))
