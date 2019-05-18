@@ -22,10 +22,10 @@ class Trainer(object):
         if optimizer == "recommended":
             optimizer = self.recommended_optimizer()
         multpl_sets,sets = sets
-        if sets < 1:
-            sys.stdout.write("Error: Trying to run multiple sets with low value: %s\n" % sets)
-            sys.exit(1)
         if multpl_sets:
+            if sets < 1:
+                sys.stdout.write("Error: Trying to run multiple sets with low value: %s\n" % sets)
+                sys.exit(1)
             sys.stdout.write("Running multiple sets\n")
             # HACK: this is just terrible
             while sets != 0:
@@ -42,7 +42,7 @@ class Trainer(object):
 
 def main():
     args = None
-    Trainer("MLP").run_neural_network("recommended",sets=(True,2))
+    Trainer("MLP").run_neural_network("recommended")
 
 
 
