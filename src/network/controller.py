@@ -20,10 +20,16 @@ class CNNBot(object):
             sys.exit(1)
         self.model = load_model(set_name)
         self.start = time.time()
-        driver = BController().get_driver()
-        self.driver = driver.find_element_by_id("t")
+        self.b_controller = BController()
+        self.session_driver = self.b_controller.get_driver()
+        self.driver = self.session_driver.find_element_by_id("t")
         # start game
         self.driver.send_keys(u'\ue013')
+
+    def __del__(self):
+        sys.stdout.write("Closing browser session\n")
+        self.session_driver.quit()
+        del self.b_controller
 
     def predict(self):
         sct = mss()
@@ -43,22 +49,18 @@ class CNNBot(object):
         img = cv2.Canny(img, threshold1=100, threshold2=200)
         img = cv2.resize(img, (0,0), fx=0.5, fy=0.5)
         img = img[np.newaxis, :, :, np.newaxis]
-        img = np.array(img)
+        # img = np.array(img)
 
         # model prediction
         y_prob = self.model.predict(img)
         prediction = y_prob.argmax(axis=-1)
 
-        if keyboard.is_pressed("q"):
-            sys.exit(0)
-
-        sys.stdout.flush()
         if int(prediction) == 1:
             # jump
             sys.stdout.write("jump\n")
             # time.sleep(0.1)
             keyboard.press("up arrow")
-            time.sleep(0.1)
+            time.sleep(0.2)
             keyboard.release("up arrow")
         elif int(prediction) == 0:
             # do nothing
@@ -67,7 +69,6 @@ class CNNBot(object):
         elif int(prediction) == 2:
             # duck
             sys.stdout.write("duck\n")
-            time.sleep(0.2)
             keyboard.press("down arrow")
             time.sleep(0.2)
             keyboard.release("down arrow")

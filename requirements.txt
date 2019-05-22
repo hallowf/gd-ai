@@ -1,3 +1,4 @@
+# virtualenv must be 16.1
 selenium
 opencv-python
 keyboard
@@ -5,3 +6,4 @@ mss
 keras
 tensorflow
 sklearn
+PyInstaller

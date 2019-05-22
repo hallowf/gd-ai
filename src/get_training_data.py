@@ -10,7 +10,7 @@ class Watcher(object):
         self.capturing = False
         self.driver_version = driver
         self.driver_connected = False
-        browser = BController()
+        browser = BController(driver)
         self.driver = browser.get_driver()
 
     def countdown(self,t):
@@ -27,5 +27,5 @@ class Watcher(object):
 
 
 
-t = Watcher("74")
+t = Watcher("75")
 t.start()

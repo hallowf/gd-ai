@@ -42,7 +42,7 @@ class Trainer(object):
 
 def main():
     args = None
-    Trainer("MLP").run_neural_network("recommended")
+    Trainer("CIFAR10",1).run_neural_network("recommended")
 
 
 

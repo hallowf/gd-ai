@@ -1,6 +1,6 @@
-import os, sys
+import os, sys, time, threading
+import keyboard
 import keras
-from keras.models import load_model
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D
@@ -51,7 +51,10 @@ class CNN(object):
         self.actions = {}
         # map trained data
         self.map_actions()
-        self.map_images()
+        self.mapping_images = True
+        self.map_images(self.img_num, self.img_count)
+        # self.map_images_threaded()
+        # self.mapper_counter()
 
     def map_actions(self):
         with open ('actions/set%s_actions.csv' % self.set, 'r') as f:
@@ -67,11 +70,20 @@ class CNN(object):
         self.actions_count = up + front + down
         sys.stdout.write("Actions: %s\n" % self.actions)
 
-    def map_images(self):
+    def mapper_counter(self):
+        while self.mapping_images:
+            time.sleep(3)
+            keyboard.send("q")
+
+    def map_images_threaded(self):
+        self.sorter_thread = threading.Thread(target=self.map_images, args=(self.img_num,self.img_count))
+        self.sorter_thread.start()
+
+    def map_images(self, img_num, img_count):
         all_images = []
-        while self.img_num < self.img_count:
-            if os.path.isfile("images/set%s/frame_%s.jpg" % (self.set,self.img_num)):
-                img = cv2.imread("images/set%s/frame_%s.jpg" % (self.set,self.img_num), cv2.IMREAD_GRAYSCALE)
+        while img_num < img_count:
+            if os.path.isfile("images/set%s/frame_%s.jpg" % (self.set,img_num)):
+                img = cv2.imread("images/set%s/frame_%s.jpg" % (self.set,img_num), cv2.IMREAD_GRAYSCALE)
                 img = cv2.resize(img, (0,0), fx=0.5, fy=0.5)
                 img = img[:, :, np.newaxis]
                 # check images for errors
@@ -79,9 +91,11 @@ class CNN(object):
                 # cv2.waitKey(0)
                 h, w, c = img.shape
                 all_images.append(img)
-                self.img_num += 1
+                img_num += 1
+                cv2.destroyAllWindows()
             else:
-                sys.stdout.write("Failed to open image %s\n" % (self.img_num))
+                sys.stdout.write("Failed to open image %s\n" % (img_num))
+        self.mapping_images = False
 
 
         self.x = np.array(all_images)
@@ -181,7 +195,7 @@ class CNN(object):
         # tensorboard data callback
         tbCallBack = keras.callbacks.TensorBoard(log_dir=graph_dir, histogram_freq=0, write_graph=True, write_images=True)
 
-        model.fit(x_train, y_train, batch_size=300, epochs=120, validation_data=(x_test, y_test), callbacks=[tbCallBack])
+        model.fit(x_train, y_train, batch_size=20, epochs=30, validation_data=(x_test, y_test), callbacks=[tbCallBack])
         if not os.path.isdir("trained_models"):
             os.mkdir("trained_models")
         # Build name: networkType_optimizer_set(X)_trainingData.h5
