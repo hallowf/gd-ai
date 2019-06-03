@@ -1,6 +1,8 @@
 # virtualenv must be 16.1
 selenium
+numpy==1.16.1
 opencv-python
+pandas
 keyboard
 mss
 keras
