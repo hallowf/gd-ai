@@ -1,13 +1,12 @@
 import os, argparse, sys
-from network.network import CNN
-
-
+from network.keras_network import KMainframe
 
 class Trainer(object):
     """docstring for Trainer."""
-    def __init__(self, network_type="unknown",set=1):
-        self.network = network_type
-        self.set = set
+    def __init__(self, model, identifier, optzr, *args, **kwargs):
+        self.model = model
+        self.identifier = identifier
+        self.optzr = optzr
 
     def recommended_optimizer(self):
         models = {
@@ -16,35 +15,26 @@ class Trainer(object):
             "MLP": "RMSprop",
             "VGG": "SGD"
         }
-        return models[self.network]
+        return models[self.model]
 
-    def run_neural_network(self, optimizer="recommended", sets=(False,0)):
+    def run_neural_network(self, optimizer="recommended"):
         if optimizer == "recommended":
-            optimizer = self.recommended_optimizer()
-        multpl_sets,sets = sets
-        if multpl_sets:
-            if sets < 1:
-                sys.stdout.write("Error: Trying to run multiple sets with low value: %s\n" % sets)
-                sys.exit(1)
-            sys.stdout.write("Running multiple sets\n")
-            # HACK: this is just terrible
-            while sets != 0:
-                sys.stdout.write("Running %s on set %s with optimizer %s\n" % (self.network, self.set, optimizer))
-                cnn = CNN(set=self.set, network_type=self.network, optimizer=optimizer)
-                cnn.start()
-                sets -= 1
-                self.set += 1
-        else:
-            sys.stdout.write("Running %s on set %s with optimizer %s\n" % (self.network, self.set, optimizer))
-            cnn = CNN(set=self.set, network_type=self.network, optimizer=optimizer)
+            self.optzr = self.recommended_optimizer()
+        sys.stdout.write("Running %s on id: %s with optimizer %s\n" % (self.model, self.identifier, self.optzr))
+        cnn = KMainframe(self.identifier, self.model, self.optzr)
+        try:
             cnn.start()
+        except Exception as e:
+            print(e)
 
-
-def main():
-    args = None
-    Trainer("CIFAR10",1).run_neural_network("recommended")
 
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description="Trains a model with the data provided")
+    parser.add_argument("identifier", type=str, help="An identifier for training data file")
+    parser.add_argument("model", type=str, help="Model to build check instructions.md for available modules")
+    parser.add_argument("--optzr","--optimizer", type=str, help="Optimizer to user with keras models only")
+    args = parser.parse_args()
+    optzr = args.optzr or "Adam"
+    Trainer(args.model,args.identifier, optzr).run_neural_network()
