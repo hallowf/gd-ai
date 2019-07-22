@@ -41,6 +41,7 @@ class Recorder(object):
         print("Recorder removed")
 
     def do_save(self):
+        self.switcher("pause")
         if len(self.training_data) > 100:
             trained_data = self.training_data
             self.filename = "training/training_data_%s%s.npy" % (self.identifier,self.counter)

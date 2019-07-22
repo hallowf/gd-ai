@@ -21,14 +21,13 @@ class KModelBuilder(object):
             sys.stdout.write("Invalid network type: %s\n" % network_type)
         self.model = model
 
-    def return_model(self):
+    def return_model(self, identifier):
         model = self.models[self.model]()
         if not os.path.isdir("trained_models"):
             os.mkdir("trained_models")
-        model_summary = "trained_models/%s.txt" % (self.model)
-        # with open(model_summary, "w") as f:
-            # a = model.summary()
-            # f.write(str(a))
+        model_summary = "trained_models/%s_%s_summary.txt" % (identifier,self.model)
+        with open(model_summary, "w") as f:
+                model.summary(print_fn=lambda x: f.write(x+"\n"))
         return model
 
     def build_unknown_model(self):

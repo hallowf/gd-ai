@@ -1,4 +1,4 @@
-# virtualenv must be 16.1
+# virtualenv must be 16.1 to be able to package exe
 selenium
 numpy==1.16.1
 opencv-python
@@ -8,4 +8,5 @@ mss
 keras
 tensorflow
 sklearn
-PyInstaller
+# For creating a executable
+# PyInstaller

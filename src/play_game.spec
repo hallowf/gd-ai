@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['play_game.py'],
-             pathex=['C:\\Users\\hallowf\\Desktop\\Git\\GD_AI\\src', '..\\env\\Lib\\'],
+             pathex=[$PROJECT_PATH, $VENV],
              binaries=[],
              datas=[],
              hiddenimports=['h5py','h5py.defs','h5py.utils','h5py.h5ac','h5py._proxy'],

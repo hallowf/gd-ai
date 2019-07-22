@@ -74,12 +74,12 @@ class Balancer(object):
 
         for data in self.training_data:
             img = data[0]
-            print("before",img.shape)
+            # print("before",img.shape)
             # Rezise and reshape image
             img = cv2.resize(img, (0,0), fx=0.5, fy=0.5)
             img = img[:, :, np.newaxis]
             # img = img.reshape(-1,80,270, 1)
-            print("after",img.shape)
+            # print("after",img.shape)
             choice = data[1]
 
             # forward, jump, duck

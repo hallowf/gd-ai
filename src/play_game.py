@@ -12,12 +12,16 @@ from browser_controller import BController
 # all others seem bad
 
 if __name__ == '__main__':
-    bot = CNNBot("CIFAR10_RMSprop_set1.h5")
+    bot = CNNBot("trained_models/jd_CIFAR10_RMSprop.h5")
+    is_paused = False
     try:
         while True:
-            if keyboard.is_pressed("q"):
-                raise KeyboardInterrupt
-            bot.predict()
+            if not is_paused:
+                if keyboard.is_pressed("q"):
+                    raise KeyboardInterrupt
+                if keyboard.is_pressed("t"):
+                    is_paused = not is_paused
+                bot.predict()
     except KeyboardInterrupt:
         del bot
         sys.stdout.write("Disconnecting\n")
